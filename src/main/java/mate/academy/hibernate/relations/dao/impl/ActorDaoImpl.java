@@ -15,10 +15,8 @@ public class ActorDaoImpl extends AbstractDao implements ActorDao {
 
     @Override
     public Actor add(Actor actor) {
-        Session session = null;
         Transaction transaction = null;
-        try {
-            session = factory.openSession();
+        try (Session session = factory.openSession()) {
             transaction = session.beginTransaction();
             session.persist(actor);
             transaction.commit();
@@ -28,10 +26,6 @@ public class ActorDaoImpl extends AbstractDao implements ActorDao {
             }
             throw new DataProcessingException("Cannot add new actor with name"
                     + actor.getName() + " to database.", e);
-        } finally {
-            if (session != null) {
-                session.close();
-            }
         }
         return actor;
     }
@@ -39,10 +33,10 @@ public class ActorDaoImpl extends AbstractDao implements ActorDao {
     @Override
     public Optional<Actor> get(Long id) {
         Session session = null;
-        Optional<Actor> findedActor;
+        Optional<Actor> foundActor;
         try {
             session = factory.openSession();
-            findedActor = Optional.ofNullable(session.find(Actor.class, id));
+            foundActor = Optional.ofNullable(session.find(Actor.class, id));
         } catch (Exception e) {
             throw new DataProcessingException("Can not get actor by id: "
                     + id, e);
@@ -51,6 +45,6 @@ public class ActorDaoImpl extends AbstractDao implements ActorDao {
                 session.close();
             }
         }
-        return findedActor;
+        return foundActor;
     }
 }

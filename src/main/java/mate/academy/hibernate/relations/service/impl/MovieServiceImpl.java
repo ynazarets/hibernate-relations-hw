@@ -8,14 +8,15 @@ import mate.academy.hibernate.relations.service.MovieService;
 import mate.academy.hibernate.relations.util.HibernateUtil;
 
 public class MovieServiceImpl implements MovieService {
-    private final MovieDao movieDao = new MovieDaoImpl(HibernateUtil.getSessionFactory());
+    private final MovieDao movieDao;
 
-    public MovieServiceImpl(MovieDaoImpl movieDao) {
+    public MovieServiceImpl(MovieDao movieDao) {
+        this.movieDao = movieDao;
     }
 
     @Override
-    public Movie add(Movie country) {
-        return movieDao.add(country);
+    public Movie add(Movie movie) {
+        return movieDao.add(movie);
     }
 
     @Override
